@@ -2,9 +2,12 @@
 
 import {
   Gavel,
+  Scale,
 } from "lucide-react"
 import type { FilterState } from "../filter-panel"
 import { vendors } from "@/lib/vendor-data"
+import { KPICard } from "../kpi-card"
+import { GaugeChart } from "../gauge-chart"
 import {
   LineChart,
   Line,
@@ -112,12 +115,14 @@ export function PostAwardPage({ filters }: PostAwardPageProps) {
   const sums = safe.reduce(
     (acc, v) => {
       acc.avgScoreClosed += v.postAward.averageScoreClosed
+      acc.claims += v.postAward.claimsCount
+      acc.changeRequests += v.postAward.changeRequestsCount
       return acc
     },
-    {
-      avgScoreClosed: 0,
-    }
+    { avgScoreClosed: 0, claims: 0, changeRequests: 0 }
   )
+
+  const avgScoreClosed = Math.round((sums.avgScoreClosed / count) * 10) / 10
 
   const years = ["2022", "2023", "2024", "2025", "2026"]
   const caDependanceData = years.map((year, idx) => {
@@ -170,24 +175,60 @@ export function PostAwardPage({ filters }: PostAwardPageProps) {
   return (
     <div className="space-y-1.5">
 
-      {/* ── ROW 1: Line graph (Chiffre d'Affaire & JESA Dependence) — replaces gauges + KPI cards ── */}
-      <div className="bg-card rounded-lg p-2 shadow-sm border border-border/50 flex flex-col h-[180px]">
-        <h3 className="text-xs font-semibold text-foreground mb-1 flex-shrink-0">
-          Chiffre d&apos;Affaire &amp; JESA Dependence
-        </h3>
-        <div className="flex-1 min-h-0">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={caDependanceData} margin={{ left: 0, right: 24, top: 4, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="year" tick={{ fontSize: 9 }} stroke="#9ca3af" />
-              <YAxis yAxisId="left" tick={{ fontSize: 9 }} stroke="#6366f1" width={24} />
-              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 9 }} stroke="#10b981" width={24} domain={[0, 100]} />
-              <Tooltip />
-              <Legend wrapperStyle={{ fontSize: "9px", paddingTop: "4px" }} iconSize={8} />
-              <Line yAxisId="left" type="monotone" dataKey="ca" stroke="#4f46e5" strokeWidth={1.5} dot={{ fill: "#4f46e5", r: 2 }} name="Chiffre d'Affaire (M MAD)" />
-              <Line yAxisId="right" type="monotone" dataKey="dependance" stroke="#10b981" strokeWidth={1.5} dot={{ fill: "#10b981", r: 2 }} name="Dependence to JESA (%)" />
-            </LineChart>
-          </ResponsiveContainer>
+      {/* ── ROW 1: Line chart + KPI cards ── */}
+      <div className="flex gap-1.5 h-[180px]">
+
+        {/* Line chart */}
+        <div className="bg-card rounded-lg p-2 shadow-sm border border-border/50 flex flex-col flex-1 min-w-0">
+          <h3 className="text-xs font-semibold text-foreground mb-1 flex-shrink-0">
+            Chiffre d&apos;Affaire &amp; JESA Dependence
+          </h3>
+          <div className="flex-1 min-h-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={caDependanceData} margin={{ left: 0, right: 24, top: 4, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="year" tick={{ fontSize: 9 }} stroke="#9ca3af" />
+                <YAxis yAxisId="left" tick={{ fontSize: 9 }} stroke="#6366f1" width={24} />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 9 }} stroke="#10b981" width={24} domain={[0, 100]} />
+                <Tooltip />
+                <Legend wrapperStyle={{ fontSize: "9px", paddingTop: "4px" }} iconSize={8} />
+                <Line yAxisId="left" type="monotone" dataKey="ca" stroke="#4f46e5" strokeWidth={1.5} dot={{ fill: "#4f46e5", r: 2 }} name="Chiffre d'Affaire (M MAD)" />
+                <Line yAxisId="right" type="monotone" dataKey="dependance" stroke="#10b981" strokeWidth={1.5} dot={{ fill: "#10b981", r: 2 }} name="Dependence to JESA (%)" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* KPI panel: 2 cards top row + gauge bottom */}
+        <div className="flex flex-col gap-1.5 w-[260px] flex-shrink-0">
+          <div className="flex gap-1.5 flex-1">
+            <div className="flex-1">
+              <KPICard
+                title="Change Requests"
+                value={sums.changeRequests}
+                icon={<Scale className="w-4 h-4" />}
+                variant="blue"
+              />
+            </div>
+            <div className="flex-1">
+              <KPICard
+                title="Count of Claims"
+                value={sums.claims}
+                icon={<Gavel className="w-4 h-4" />}
+                variant="red"
+              />
+            </div>
+          </div>
+          {/* Gauge spanning full width of panel */}
+          <div className="flex-1 bg-card rounded-lg shadow-sm border border-border/50 flex items-center justify-center">
+            <GaugeChart
+              value={Number(((sums.avgScoreClosed / count) * 20).toFixed(1))}
+              maxValue={100}
+              title="Avg Score Closed"
+              size="sm"
+              suffix="%"
+            />
+          </div>
         </div>
       </div>
 
