@@ -220,7 +220,7 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
       </div>
 
       {/* ── ROW A: 5-col grid — HSE | Ecosystem | Sustainability | Compliance | Global Risk ── */}
-      <div className="grid grid-cols-5 gap-1.5 min-h-[95px]">
+      <div className="grid grid-cols-5 gap-1.5 min-h-[75px]">
         <ScoreCard label="HSE" value={avgScores.hse} />
         <ScoreCard label="Ecosystem" value={avgScores.ecosystem} />
         <ScoreCard label="Sustainability" value={avgScores.sustainability} />
