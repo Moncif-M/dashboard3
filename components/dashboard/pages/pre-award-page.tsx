@@ -10,6 +10,7 @@ import {
   PieChart,
   Users,
   RotateCcw,
+  ShieldAlert,
 } from "lucide-react"
 import { KPICard } from "../kpi-card"
 import type { FilterState } from "../filter-panel"
@@ -172,17 +173,7 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
     )
   }
 
-  function RiskCard({ label, value }: { label: string; value: number }) {
-    const color = riskColor(value)
-    const riskLbl = riskLabelFromValue(value)
-    return (
-      <div className="bg-card rounded-lg p-2 shadow-sm border border-border/50 flex flex-col justify-between">
-        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider text-left">{label}</p>
-        <p className="text-2xl font-bold text-left" style={{ color }}>{riskLbl}</p>
-        <p className="text-[10px] text-muted-foreground text-left">Global risk level</p>
-      </div>
-    )
-  }
+
 
   return (
     <div className="space-y-2">
@@ -234,7 +225,16 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
         <ScoreCard label="Ecosystem" value={avgScores.ecosystem} />
         <ScoreCard label="Sustainability" value={avgScores.sustainability} />
         <ScoreCard label="Compliance" value={avgScores.compliance} />
-        <RiskCard label="Vendor Global Risk" value={riskValue} />
+        <KPICard
+          title="Vendor Global Risk"
+          value={
+            <span style={{ color: riskColor(riskValue) }}>
+              {riskLabelFromValue(riskValue)}
+            </span>
+          }
+          icon={<ShieldAlert className="w-4 h-4" />}
+          variant={riskValue <= 30 ? "green" : riskValue <= 50 ? "yellow" : "red"}
+        />
       </div>
 
       {/* ── ROW B: 4-col grid ── */}
