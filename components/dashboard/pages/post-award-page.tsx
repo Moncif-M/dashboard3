@@ -234,10 +234,10 @@ export function PostAwardPage({ filters }: PostAwardPageProps) {
 
       {/* ── ROW 2: NCR & QOR tables ── */}
       <div className="grid grid-cols-2 gap-1.5">
-        <div className="h-[280px] flex flex-col">
+        <div className="h-[240px] flex flex-col">
           <DataTable title="NCR Count by Status / Contractor / Project" rows={ncrRows} />
         </div>
-        <div className="h-[280px] flex flex-col">
+        <div className="h-[240px] flex flex-col">
           <DataTable title="QOR Count by Status / Contractor / Project" rows={qorRows} />
         </div>
       </div>

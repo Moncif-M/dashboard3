@@ -173,13 +173,11 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
     )
   }
 
-
-
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
 
       {/* ── ROW 1: 5 cols ── */}
-      <div className="grid grid-cols-5 gap-1.5 min-h-[90px]">
+      <div className="grid grid-cols-5 gap-x-1.5 gap-y-3 min-h-[90px]">
 
         {/* Overall Status */}
         <div className="bg-card rounded-lg p-3 shadow-sm border border-border/50 relative overflow-hidden h-full">
@@ -219,8 +217,8 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
         />
       </div>
 
-      {/* ── ROW A: 5-col grid — HSE | Ecosystem | Sustainability | Compliance | Global Risk ── */}
-      <div className="grid grid-cols-5 gap-1.5 min-h-[75px]">
+      {/* ── ROW A: 5-col grid ── */}
+      <div className="grid grid-cols-5 gap-x-1.5 gap-y-3 min-h-[75px]">
         <ScoreCard label="HSE" value={avgScores.hse} />
         <ScoreCard label="Ecosystem" value={avgScores.ecosystem} />
         <ScoreCard label="Sustainability" value={avgScores.sustainability} />
@@ -238,7 +236,7 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
       </div>
 
       {/* ── ROW B: 4-col grid ── */}
-      <div className="grid grid-cols-4 gap-1.5 min-h-[95px]">
+      <div className="grid grid-cols-4 gap-x-1.5 gap-y-3 min-h-[95px]">
 
         {/* Tiering */}
         <div className="rounded-lg p-2 shadow-sm border border-border/50 bg-card relative overflow-hidden">
@@ -281,7 +279,7 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
       </div>
 
       {/* ── ROW C: 4-col grid ── */}
-      <div className="grid grid-cols-4 gap-1.5 min-h-[110px]">
+      <div className="grid grid-cols-4 gap-x-1.5 gap-y-3 min-h-[110px]">
         <KPICard title="Nbre Contractants" value={sum.contractants} icon={<Users className="w-4 h-4" />} variant="yellow" />
         <KPICard title="Nbre de contrat" value={sum.contracts} icon={<RotateCcw className="w-4 h-4" />} variant="blue" />
         <KPICard title="Successful Awards" value={sum.successfulAwards} icon={<Trophy className="w-4 h-4" />} variant="green" />
