@@ -91,7 +91,7 @@ export function Dashboard() {
                 )}
               >
                 <LayoutDashboard className="w-4 h-4" />
-                CA/NCR/QOR
+                Overall CA/Execution
               </button>
             </div>
           </div>

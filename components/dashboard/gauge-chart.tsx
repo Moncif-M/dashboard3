@@ -1,7 +1,5 @@
 "use client"
-
 import { cn } from "@/lib/utils"
-
 interface GaugeChartProps {
   value: number
   maxValue?: number
@@ -9,12 +7,17 @@ interface GaugeChartProps {
   size?: "sm" | "md" | "lg"
   showLabel?: boolean
   suffix?: string
+  invertColor?: boolean
 }
-
-export function GaugeChart({ value, maxValue = 100, title, size = "md", showLabel = true, suffix = "" }: GaugeChartProps) {
+export function GaugeChart({ value, maxValue = 100, title, size = "md", showLabel = true, suffix = "", invertColor = false }: GaugeChartProps) {
   const percentage = Math.min((value / maxValue) * 100, 100)
   
   const getColor = (pct: number) => {
+    if (invertColor) {
+      if (pct >= 80) return { stroke: "#ef4444", bg: "#fee2e2" }
+      if (pct >= 60) return { stroke: "#f59e0b", bg: "#fef3c7" }
+      return { stroke: "#10b981", bg: "#d1fae5" }
+    }
     if (pct >= 80) return { stroke: "#10b981", bg: "#d1fae5" }
     if (pct >= 60) return { stroke: "#f59e0b", bg: "#fef3c7" }
     return { stroke: "#ef4444", bg: "#fee2e2" }
@@ -37,7 +40,6 @@ export function GaugeChart({ value, maxValue = 100, title, size = "md", showLabe
     <div className="flex flex-col items-center gap-2">
       <div className="relative" style={{ width, height: width / 2 + 10 }}>
         <svg width={width} height={width / 2 + 10} className="overflow-visible">
-          {/* Background arc */}
           <path
             d={`M ${strokeWidth / 2} ${width / 2} A ${radius} ${radius} 0 0 1 ${width - strokeWidth / 2} ${width / 2}`}
             fill="none"
@@ -45,7 +47,6 @@ export function GaugeChart({ value, maxValue = 100, title, size = "md", showLabe
             strokeWidth={strokeWidth}
             strokeLinecap="round"
           />
-          {/* Value arc */}
           <path
             d={`M ${strokeWidth / 2} ${width / 2} A ${radius} ${radius} 0 0 1 ${width - strokeWidth / 2} ${width / 2}`}
             fill="none"

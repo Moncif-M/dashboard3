@@ -2,7 +2,6 @@
 
 import {
   Layers,
-  ShieldAlert,
   Trophy,
   Coins,
   FileText,
@@ -11,7 +10,6 @@ import {
   PieChart,
   Users,
   RotateCcw,
-  Scale,
 } from "lucide-react"
 import { KPICard } from "../kpi-card"
 import type { FilterState } from "../filter-panel"
@@ -83,8 +81,6 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
       acc.disciplineContract += v.postAward.disciplineScores.contract
       acc.contractants += v.postAward.contractantsCount
       acc.contracts += v.postAward.contractsCount
-      acc.claims += v.postAward.claimsCount
-      acc.changeRequests += v.postAward.changeRequestsCount
       return acc
     },
     {
@@ -103,8 +99,6 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
       disciplineContract: 0,
       contractants: 0,
       contracts: 0,
-      claims: 0,
-      changeRequests: 0,
     }
   )
 
@@ -165,7 +159,6 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
     scorePreAward >= 90 ? "Very good" : scorePreAward >= 80 ? "Good" : scorePreAward >= 60 ? "Medium" : "Low"
 
   const riskValue = Math.round(sum.risk / count)
-  const riskLabel = riskLabelFromValue(riskValue)
 
   function ScoreCard({ label, value }: { label: string; value: number }) {
     return (
@@ -179,17 +172,17 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
     )
   }
 
- function RiskCard({ label, value }: { label: string; value: number }) {
-  const color = riskColor(value)
-  const riskLbl = riskLabelFromValue(value)
-  return (
-    <div className="bg-card rounded-lg p-2 shadow-sm border border-border/50 flex flex-col justify-between">
-      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider text-left">{label}</p>
-      <p className="text-2xl font-bold text-left" style={{ color }}>{riskLbl}</p>
-      <p className="text-[10px] text-muted-foreground text-left">Global risk level</p>
-    </div>
-  )
-}
+  function RiskCard({ label, value }: { label: string; value: number }) {
+    const color = riskColor(value)
+    const riskLbl = riskLabelFromValue(value)
+    return (
+      <div className="bg-card rounded-lg p-2 shadow-sm border border-border/50 flex flex-col justify-between">
+        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider text-left">{label}</p>
+        <p className="text-2xl font-bold text-left" style={{ color }}>{riskLbl}</p>
+        <p className="text-[10px] text-muted-foreground text-left">Global risk level</p>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-2">
@@ -244,8 +237,8 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
         <RiskCard label="Vendor Global Risk" value={riskValue} />
       </div>
 
-      {/* ── ROW B: 5-col grid ── */}
-      <div className="grid grid-cols-5 gap-1.5 min-h-[95px]">
+      {/* ── ROW B: 4-col grid ── */}
+      <div className="grid grid-cols-4 gap-1.5 min-h-[95px]">
 
         {/* Tiering */}
         <div className="rounded-lg p-2 shadow-sm border border-border/50 bg-card relative overflow-hidden">
@@ -284,17 +277,15 @@ export function PreAwardPage({ filters }: PreAwardPageProps) {
 
         <KPICard title="Ongoing Bids" value={sum.ongoingBids} icon={<Gavel className="w-4 h-4" />} variant="default" />
         <KPICard title="Ongoing PO / Contracts" value={sum.ongoingPO} icon={<FileText className="w-4 h-4" />} variant="default" />
-        <KPICard title="Change Requests" value={sum.changeRequests} icon={<Scale className="w-4 h-4" />} variant="blue" />
-        <KPICard title="Awarding Volume" value={formatMillions(sum.awardingVolume)} icon={<Coins className="w-4 h-4" />} variant="orange" />
+        <KPICard title="% of JESA Scope" value={`${Math.round(sum.jesaScope / count)}%`} icon={<PieChart className="w-4 h-4" />} variant="blue" />
       </div>
 
-      {/* ── ROW C: 5-col grid ── */}
-      <div className="grid grid-cols-5 gap-1.5 min-h-[110px]">
+      {/* ── ROW C: 4-col grid ── */}
+      <div className="grid grid-cols-4 gap-1.5 min-h-[110px]">
         <KPICard title="Nbre Contractants" value={sum.contractants} icon={<Users className="w-4 h-4" />} variant="yellow" />
         <KPICard title="Nbre de contrat" value={sum.contracts} icon={<RotateCcw className="w-4 h-4" />} variant="blue" />
         <KPICard title="Successful Awards" value={sum.successfulAwards} icon={<Trophy className="w-4 h-4" />} variant="green" />
-        <KPICard title="% of JESA Scope" value={`${Math.round(sum.jesaScope / count)}%`} icon={<PieChart className="w-4 h-4" />} variant="blue" />
-        <KPICard title="Count of Claims" value={sum.claims} icon={<Gavel className="w-4 h-4" />} variant="red" />
+        <KPICard title="Awarding Volume" value={formatMillions(sum.awardingVolume)} icon={<Coins className="w-4 h-4" />} variant="orange" />
       </div>
 
     </div>
